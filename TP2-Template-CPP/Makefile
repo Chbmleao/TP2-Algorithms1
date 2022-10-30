@@ -1,28 +1,18 @@
-CC=gcc
-CXX=g++
-RM=rm -f
-CPPFLAGS=-g -Wall
-LDFLAGS=-g
-LDLIBS=
+CC=g++
+CFLAGS=-I. -Wall -Wextra -Werror -std=c++11 -pedantic -O2 -g
+DEPS = rock.hpp
+OBJ = rock.o main.o 
 
-SRCS=main.cpp rock.cpp
-OBJS=$(subst .cpp,.o,$(SRCS))
+all: main run
 
-all: tp02
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-tp02: $(OBJS)
-	$(CXX) $(LDFLAGS) -o tp02 $(OBJS) $(LDLIBS)
+main: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
-depend: .depend
-
-.depend: $(SRCS)
-	$(RM) ./.depend
-	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
+run: 
+	./main
 
 clean:
-	$(RM) $(OBJS) tp02
-
-distclean: clean
-	$(RM) *~ .depend tp02
-
-include .depend
+	rm -f *.o main
