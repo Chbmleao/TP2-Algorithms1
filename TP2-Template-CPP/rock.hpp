@@ -1,5 +1,5 @@
 #include <iostream>
 #include <vector>
 
-std::vector<std::vector<float>> createRatingMatrix(int numRows, int numCols);
+std::vector<float> createTotalRatingVector(int numRows, int numCols);
 void readFile();
