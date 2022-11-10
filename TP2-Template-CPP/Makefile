@@ -3,16 +3,16 @@ CFLAGS=-I. -Wall -Wextra -Werror -std=c++11 -pedantic -O2 -g
 DEPS = rock.hpp
 OBJ = rock.o main.o 
 
-all: main run
+all: tp02 run
 
 %.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: $(OBJ)
+tp02: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 run: 
-	./main < input.txt
+	./tp02 < input.txt
 
 clean:
-	rm -f *.o main
+	rm -f *.o tp02
