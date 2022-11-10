@@ -1,3 +1,9 @@
 main
+tp02
 main.o
 rock.o
+test_files
+big_input.txt.out
+medium_input.txt.out
+small_input.txt.out
+trivial_input.txt.out

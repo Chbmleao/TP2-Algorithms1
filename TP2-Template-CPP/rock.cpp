@@ -66,7 +66,6 @@ Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
             solution.updateInterval(SUFSUBARRAY, start, end);
             solution.updateInterval(PRESUBARRAY, start, end);
         }
-        
 
         return solution;
     }
@@ -136,16 +135,30 @@ void readFile() {
     while (numFriends != 0 && numShows != 0) {
         std::vector<float> friendsRating = createTotalRatingVector(numFriends, numShows);
     
-        std::cout << "Vector: " << std::endl;
-        for (int i = 0; i < numShows; i++) {
-            std::cout << friendsRating[i] << " ";
-        }
-        std::cout << std::endl;
+        // std::cout << "Vector: " << std::endl;
+        // for (int i = 0; i < numShows; i++) {
+        //     std::cout << friendsRating[i] << " ";
+        // }
+        // std::cout << std::endl;
 
         Solution rockSolution = maxSubarraySum(friendsRating, 0, numShows-1);
 
-        std::cout << "Max SubArray Sum: " << rockSolution.maxSubarraySum << std::endl;
-        std::cout << "Max Interval: " << rockSolution.maxSubarrayInterval[0]+1 << " - " << rockSolution.maxSubarrayInterval[1]+1 << std::endl << std::endl;
+        // std::cout << "Max SubArray Sum: " << rockSolution.maxSubarraySum << std::endl;
+        // std::cout << "Max Interval: " << rockSolution.maxSubarrayInterval[0]+1 << " - " << rockSolution.maxSubarrayInterval[1]+1 << std::endl << std::endl;
+
+        if(rockSolution.maxSubarrayInterval[0] == -1 && rockSolution.maxSubarrayInterval[1] == -1) {
+            int greaterShowIndex = 0; 
+            int greaterShowRank = friendsRating[0];
+            for (int i = 1; i < numShows; i++) {
+                if (friendsRating[i] > greaterShowRank) {
+                    greaterShowIndex = i;
+                    greaterShowRank = friendsRating[i];
+                }
+            }
+            
+            std::cout << greaterShowIndex+1 << " " << greaterShowIndex+1 << std::endl;
+        } else
+            std::cout << rockSolution.maxSubarrayInterval[0]+1 << " " << rockSolution.maxSubarrayInterval[1]+1 << std::endl;
 
         std::cin >> numFriends;
         std::cin >> numShows;
