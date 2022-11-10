@@ -13,7 +13,7 @@ for i in trivial_input.txt small_input.txt medium_input.txt big_input.txt
 do
     echo -n "Running test $i ... "
 
-    timeout 70 ./tp02 < test_files/$i > $i.out
+    timeout 75 ./tp02 < test_files/$i > $i.out
     if [ $? -eq 124 ]
     then
         echo "---> Timeout"

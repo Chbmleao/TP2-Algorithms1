@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <utility>
 
 #define SUMSUBARRAY 0
 #define MAXSUBARRAY 1
@@ -14,41 +15,41 @@ Solution::Solution() {
     this->prefix = 0;
     this->suffix = 0;
     this->sum = 0;
-    this->sumInterval[0] = -1;
-    this->sumInterval[1] = -1;
-    this->maxSubarrayInterval[0] = -1;
-    this->maxSubarrayInterval[1] = -1;
-    this->suffixInterval[0] = -1;
-    this->suffixInterval[1] = -1;
-    this->prefixInterval[0] = -1;
-    this->prefixInterval[1] = -1;
+    this->sumInterval.first = -1;
+    this->sumInterval.second = -1;
+    this->maxSubarrayInterval.first = -1;
+    this->maxSubarrayInterval.second = -1;
+    this->suffixInterval.first = -1;
+    this->suffixInterval.second = -1;
+    this->prefixInterval.first = -1;
+    this->prefixInterval.second = -1;
 }
 
 void Solution::updateInterval(int intervalId, int start, int end) {
     if(start == -1 || end == -1)
         return;
     if (intervalId == SUMSUBARRAY) {
-        this->sumInterval[0] = start;
-        this->sumInterval[1] = end;
+        this->sumInterval.first = start;
+        this->sumInterval.second = end;
     }
-    if (intervalId == MAXSUBARRAY) {
-        this->maxSubarrayInterval[0] = start;
-        this->maxSubarrayInterval[1] = end;
+    else if (intervalId == MAXSUBARRAY) {
+        this->maxSubarrayInterval.first = start;
+        this->maxSubarrayInterval.second = end;
     }
-    if (intervalId == PRESUBARRAY) {
-        this->prefixInterval[0] = start;
-        this->prefixInterval[1] = end;
+    else if (intervalId == PRESUBARRAY) {
+        this->prefixInterval.first = start;
+        this->prefixInterval.second = end;
     }
-    if (intervalId == SUFSUBARRAY) {
-        this->suffixInterval[0] = start;
-        this->suffixInterval[1] = end;
+    else if (intervalId == SUFSUBARRAY) {
+        this->suffixInterval.first = start;
+        this->suffixInterval.second = end;
     }
 }
 
 float maxFloat(float x, float y) {
-    if (x > y)
+    if (x > y) 
         return x;
-    return y;
+    return y; 
 }
 
 Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
@@ -80,27 +81,27 @@ Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
     solution.prefix = maxFloat(leftSolution.prefix, leftSolution.sum + rightSolution.prefix);
 
     // find the sum interval
-    solution.updateInterval(SUMSUBARRAY, leftSolution.sumInterval[0], rightSolution.sumInterval[1]);
+    solution.updateInterval(SUMSUBARRAY, leftSolution.sumInterval.first, rightSolution.sumInterval.second);
 
     // find the max subarray interval
     if(solution.maxSubarraySum == leftSolution.maxSubarraySum)
-        solution.updateInterval(MAXSUBARRAY, leftSolution.maxSubarrayInterval[0], leftSolution.maxSubarrayInterval[1]);
+        solution.updateInterval(MAXSUBARRAY, leftSolution.maxSubarrayInterval.first, leftSolution.maxSubarrayInterval.second);
     if(solution.maxSubarraySum == rightSolution.maxSubarraySum)
-        solution.updateInterval(MAXSUBARRAY, rightSolution.maxSubarrayInterval[0], rightSolution.maxSubarrayInterval[1]);
+        solution.updateInterval(MAXSUBARRAY, rightSolution.maxSubarrayInterval.first, rightSolution.maxSubarrayInterval.second);
     if(solution.maxSubarraySum == (leftSolution.suffix + rightSolution.prefix))
-        solution.updateInterval(MAXSUBARRAY, leftSolution.suffixInterval[0], rightSolution.prefixInterval[1]);
+        solution.updateInterval(MAXSUBARRAY, leftSolution.suffixInterval.first, rightSolution.prefixInterval.second);
 
     // find the suffix interval
     if(solution.suffix == rightSolution.suffix)
-        solution.updateInterval(SUFSUBARRAY, rightSolution.suffixInterval[0], rightSolution.suffixInterval[1]);
+        solution.updateInterval(SUFSUBARRAY, rightSolution.suffixInterval.first, rightSolution.suffixInterval.second);
     if(solution.suffix == (leftSolution.suffix + rightSolution.sum))
-        solution.updateInterval(SUFSUBARRAY, leftSolution.suffixInterval[0], rightSolution.sumInterval[1]);
+        solution.updateInterval(SUFSUBARRAY, leftSolution.suffixInterval.first, rightSolution.sumInterval.second);
 
     // find the prefix interval
     if(solution.prefix == leftSolution.prefix)
-        solution.updateInterval(PRESUBARRAY, leftSolution.prefixInterval[0], leftSolution.prefixInterval[1]);
+        solution.updateInterval(PRESUBARRAY, leftSolution.prefixInterval.first, leftSolution.prefixInterval.second);
     if(solution.prefix == (leftSolution.sum + rightSolution.prefix))
-        solution.updateInterval(PRESUBARRAY, leftSolution.sumInterval[0], rightSolution.prefixInterval[1]);
+        solution.updateInterval(PRESUBARRAY, leftSolution.sumInterval.first, rightSolution.prefixInterval.second);
 
     return solution;
 }
@@ -143,10 +144,7 @@ void readFile() {
 
         Solution rockSolution = maxSubarraySum(friendsRating, 0, numShows-1);
 
-        // std::cout << "Max SubArray Sum: " << rockSolution.maxSubarraySum << std::endl;
-        // std::cout << "Max Interval: " << rockSolution.maxSubarrayInterval[0]+1 << " - " << rockSolution.maxSubarrayInterval[1]+1 << std::endl << std::endl;
-
-        if(rockSolution.maxSubarrayInterval[0] == -1 && rockSolution.maxSubarrayInterval[1] == -1) {
+        if(rockSolution.maxSubarrayInterval.first == -1 && rockSolution.maxSubarrayInterval.second == -1) {
             int greaterShowIndex = 0; 
             int greaterShowRank = friendsRating[0];
             for (int i = 1; i < numShows; i++) {
@@ -158,7 +156,7 @@ void readFile() {
             
             std::cout << greaterShowIndex+1 << " " << greaterShowIndex+1 << std::endl;
         } else
-            std::cout << rockSolution.maxSubarrayInterval[0]+1 << " " << rockSolution.maxSubarrayInterval[1]+1 << std::endl;
+            std::cout << rockSolution.maxSubarrayInterval.first + 1 << " " << rockSolution.maxSubarrayInterval.second + 1 << std::endl;    
 
         std::cin >> numFriends;
         std::cin >> numShows;

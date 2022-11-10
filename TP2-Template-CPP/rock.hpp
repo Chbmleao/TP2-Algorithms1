@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <utility>
 
 class Solution {
     public:
@@ -9,10 +10,10 @@ class Solution {
         float maxSubarraySum;
         float suffix;
         float prefix;
-        int sumInterval[2];
-        int maxSubarrayInterval[2];
-        int suffixInterval[2];
-        int prefixInterval[2];
+        std::pair<int, int> sumInterval;
+        std::pair<int, int> maxSubarrayInterval;
+        std::pair<int, int> suffixInterval;
+        std::pair<int, int> prefixInterval;
 };
 
 std::vector<float> createTotalRatingVector(int numRows, int numCols);
