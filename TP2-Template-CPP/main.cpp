@@ -5,7 +5,6 @@
 #include "rock.hpp"
 
 int main() {
-  // call a function in another file
   readFile();
 
   return(0);

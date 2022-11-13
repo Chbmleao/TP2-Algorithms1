@@ -15,6 +15,8 @@ Solution::Solution() {
     this->prefix = 0;
     this->suffix = 0;
     this->sum = 0;
+
+    // initializes all intervals with -1 values, which means that the interval is empty
     this->sumInterval.first = -1;
     this->sumInterval.second = -1;
     this->maxSubarrayInterval.first = -1;
@@ -25,8 +27,11 @@ Solution::Solution() {
     this->prefixInterval.second = -1;
 }
 
+// receives an intervalId, a start index, and end index that must be the new interval
+// updates one soltion interval
 void Solution::updateInterval(int intervalId, int start, int end) {
-    if(start == -1 || end == -1)
+    // if the start index or end index have invalid attributes, the function dont update the interval
+    if(start == -1 || end == -1) 
         return;
     if (intervalId == SUMSUBARRAY) {
         this->sumInterval.first = start;
@@ -46,12 +51,16 @@ void Solution::updateInterval(int intervalId, int start, int end) {
     }
 }
 
+// receives a float x and a float y
+// returns the greater
 float maxFloat(float x, float y) {
     if (x > y) 
         return x;
     return y; 
 }
 
+// receives a vector, the start index and end index
+// returns the vector solution, with the Sum, MaxSum, Suffix and Prefix
 Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
     Solution solution = Solution();
     if (start == end) {
@@ -71,6 +80,7 @@ Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
         return solution;
     }
 
+    // divides the vector in the middle and determines a solution for each part
     Solution leftSolution = maxSubarraySum(vector, start, (start + end) / 2);
     Solution rightSolution = maxSubarraySum(vector, ((start+end) / 2)+1, end);
 
@@ -106,6 +116,8 @@ Solution maxSubarraySum(std::vector<float> vector, int start, int end) {
     return solution;
 }
 
+// receives the num of rows and the num of cols to build the general score vector
+// returns the general score vector, with each show score added
 std::vector<float> createTotalRatingVector(int numRows, int numCols) {
     std::vector<float> totalRating(numCols);
 
@@ -125,7 +137,7 @@ std::vector<float> createTotalRatingVector(int numRows, int numCols) {
     return totalRating;
 }
 
-
+// main function
 void readFile() {
     int numFriends = 0;
     int numShows = 0;
@@ -135,15 +147,10 @@ void readFile() {
 
     while (numFriends != 0 && numShows != 0) {
         std::vector<float> friendsRating = createTotalRatingVector(numFriends, numShows);
-    
-        // std::cout << "Vector: " << std::endl;
-        // for (int i = 0; i < numShows; i++) {
-        //     std::cout << friendsRating[i] << " ";
-        // }
-        // std::cout << std::endl;
 
         Solution rockSolution = maxSubarraySum(friendsRating, 0, numShows-1);
 
+        // iterates the vector to find the maximum value, if the vector only has negative elements
         if(rockSolution.maxSubarrayInterval.first == -1 && rockSolution.maxSubarrayInterval.second == -1) {
             int greaterShowIndex = 0; 
             int greaterShowRank = friendsRating[0];
@@ -154,8 +161,9 @@ void readFile() {
                 }
             }
             
+            // prints the interval that only contains the greater negative element
             std::cout << greaterShowIndex+1 << " " << greaterShowIndex+1 << std::endl;
-        } else
+        } else // prints the normal interval
             std::cout << rockSolution.maxSubarrayInterval.first + 1 << " " << rockSolution.maxSubarrayInterval.second + 1 << std::endl;    
 
         std::cin >> numFriends;
